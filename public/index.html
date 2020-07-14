@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app">
+    <audio id="nudge">
+      <source src="./audio/nudge.mp3">
+    </audio>
+    <audio id="sentNudge">
+      <source src="./audio/sentNudge.mp3">
+    </audio>
+    <main>
+      <aside id="online">
+        <h4>Online users</h4>
+        <div class="user" :id="user.name" v-for="(user,index) in onlineUsers" :key ="index">
+          <img :src="'./images/' + user.avatar + '.png'" alt="" @click="nudge">
+          <div>
+            <h5>{{user.name}}</h5>
+            <p>{{user.status }}</p>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io();
+
+    var timer;
+
+    var app = new Vue({
+      el:'#app',
+      data() {
+        return {
+          myUsername:'',
+          status:'',
+          avatarNum:'',
+          onlineUsers:[],
+          inputMessage:'',
+          allMessages:[],
+          currentlyTyping:[],
+          areTyping: false,
+          typingTimer:0
+        }
+      },
+      methods: {
+        validateUsername: function(){
+          this.myUsername = prompt ('What is your username');
+          if(this.myUsername == null || this.myUsername == '' || this.myUsername == ' '){
+            this.validateUsername();
+          }
+        },
+        nudge: function(){
+          document.getElementById('nudge').play()
+        }
+      },
+      mounted(){
+        this.avatarNum = Math.floor(Math.random()*7+1);
+
+        this.validateUsername()
+        this.status = prompt('What is on your mind?');
+
+        socket.on('connect',(server)=>{
+          socket.emit('new-user', {
+            name: this.myUsername,
+            status: this.status,
+            avatar: this.avatarNum
+          })
+          socket.on('new-user-online',(data)=>{
+            this.onlineUsers = data
+          })
+        })
+      }
+    })
+  </script>
+</body>
+</html>

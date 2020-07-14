@@ -1,0 +1,27 @@
+{
+  "name": "nudge-room",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "serve": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nlukic97/Nudge-Room-WebSocket.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nlukic97/Nudge-Room-WebSocket/issues"
+  },
+  "homepage": "https://github.com/nlukic97/Nudge-Room-WebSocket#readme",
+  "description": ""
+}
